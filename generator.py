@@ -1,3 +1,4 @@
+import copy
 import random
 
 print("Welcome to the Sudoku Generator!")
@@ -13,6 +14,16 @@ print("Generating a Sudoku puzzle:")
 for row in sudoku_grid:
     print(row)
     '''
+
+
+#DIFFICULTY LEVELS WITH RANGE OF EMPTY CELLS
+
+DIFFICULTY = {
+    
+    "easy": (33, 38),    
+    "medium": (25, 30),  
+    "hard": (17, 22)    
+}
 
 #FUNCTION TO CHECK IF A NUMBER IS VALID IN A GIVEN CELL
 
@@ -100,31 +111,36 @@ def generate_sudoku(sudoku_grid):
         print(row_text)
 
 
-DIFFICULTY = {
-    
-    "easy": (33, 38),    
-    "medium": (25, 30),  
-    "hard": (17, 22)    
-}
+#FUNCTION TO GENERATE A COMPLETE SUDOKU GRID AND THEN REMOVE NUMBERS BASED ON DIFFICULTY
+
+def generate_puzzle(difficulty="medium"):
+    board = [[0] * 9 for _ in range(9)]
+    solve_sudoku(board)
+
+    playable_board = copy.deepcopy(board)  # Create a copy of the solved board for the puzzle
+
+    if difficulty in DIFFICULTY:
+        min_empty, max_empty = DIFFICULTY[difficulty]
+        target_given = random.randint(min_empty, max_empty)
+    else:
+        print("Invalid difficulty choice. Defaulting to medium.")
+        difficulty = "medium"
+        target_given = random.randint(25, 30)
+
+    remove_numbers(board, target_level=target_given)
+    generate_sudoku(board)
+    return playable_board, board  # Return the generated puzzle for further use if needed
 
 
-board = [[0] * 9 for _ in range(9)]
+#LOCAL TESTING OF THE SUDOKU GENERATOR
 
-#board[0][0] = 5
+if __name__ == "__main__":
+    print("Generating a Sudoku puzzle:")
+    choice = input("Choose difficulty (easy, medium, hard): ").strip().lower()
+    puzzle, solution = generate_puzzle(choice)
 
-solve_sudoku(board)
+    #print("\nGenerated Sudoku Puzzle:")
+    #generate_sudoku(puzzle)
 
-choose_difficulty = input("Choose difficulty (easy, medium, hard): ").strip().lower()
-if choose_difficulty in DIFFICULTY:
-    min_empty, max_empty = DIFFICULTY[choose_difficulty]
-    target_given = random.randint(min_empty, max_empty)
-else:
-    print("Invalid difficulty choice. Defaulting to medium.")
-    choose_difficulty = "medium"
-    target_given = random.randint(25, 30)
-
-remove_numbers(board, target_level=target_given)  # Remove numbers to create a puzzle with the target number of empty cells
-
-generate_sudoku(board)
-
-
+    #print("\nSudoku Solution:")
+    #generate_sudoku(solution)
