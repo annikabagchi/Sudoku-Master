@@ -100,13 +100,31 @@ def generate_sudoku(sudoku_grid):
         print(row_text)
 
 
+DIFFICULTY = {
+    
+    "easy": (33, 38),    
+    "medium": (25, 30),  
+    "hard": (17, 22)    
+}
+
+
 board = [[0] * 9 for _ in range(9)]
 
-board[0][0] = 5
+#board[0][0] = 5
 
 solve_sudoku(board)
 
-remove_numbers(board, target_level=30)  # Remove numbers to create a puzzle with 30 empty cells
+choose_difficulty = input("Choose difficulty (easy, medium, hard): ").strip().lower()
+if choose_difficulty in DIFFICULTY:
+    min_empty, max_empty = DIFFICULTY[choose_difficulty]
+    target_given = random.randint(min_empty, max_empty)
+else:
+    print("Invalid difficulty choice. Defaulting to medium.")
+    choose_difficulty = "medium"
+    target_given = random.randint(25, 30)
+
+remove_numbers(board, target_level=target_given)  # Remove numbers to create a puzzle with the target number of empty cells
 
 generate_sudoku(board)
+
 
