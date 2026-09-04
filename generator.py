@@ -1,3 +1,5 @@
+import random
+
 print("Welcome to the Sudoku Generator!")
 
 #LIST OF EMPTY ROWS
@@ -33,8 +35,29 @@ def is_valid(sudoku_grid, row, col, num):
 
     return True
 
+def solve_sudoku(sudoku_grid):
+    for row in range(9):
+        for col in range(9):
+            if sudoku_grid[row][col] == 0:  # Find an empty cell
+                
+                numbers = list(range(1, 10))
+                random.shuffle(numbers)  # Shuffle numbers to generate different solutions
 
-#GENERATING SUDOKU PUZZLE
+                for num in numbers:  # Try numbers 1-9
+                    if is_valid(sudoku_grid, row, col, num):
+                        sudoku_grid[row][col] = num  # Place the number
+
+                        if solve_sudoku(sudoku_grid):  # Recursively try to solve
+                            return True
+
+                        sudoku_grid[row][col] = 0  # Backtrack if not solvable
+
+                return False  # No valid number found, trigger backtracking
+
+    return True  # Solved successfully
+
+
+#GENERATING SUDOKU GRID W/ DIVIDERS
 
 def generate_sudoku(sudoku_grid):
     # 9x9 board w 3x3 block dividers
@@ -59,13 +82,7 @@ board = [[0] * 9 for _ in range(9)]
 
 board[0][0] = 5
 
+solve_sudoku(board)
 
 generate_sudoku(board)
 
-#test
-
-print("\nCan we place 5 at (0, 1)?", is_valid(board, 0, 1, 5))  # Should return False
-print(is_valid(board, 0, 4, 5))  # Should return True
-
-print("\nCan we place 7 at (1, 0)?", is_valid(board, 1, 0, 5))  # Should return False
-print(is_valid(board, 1, 0, 7))  # Should return True
