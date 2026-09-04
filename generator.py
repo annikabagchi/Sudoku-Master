@@ -14,6 +14,7 @@ for row in sudoku_grid:
     print(row)
     '''
 
+#FUNCTION TO CHECK IF A NUMBER IS VALID IN A GIVEN CELL
 
 def is_valid(sudoku_grid, row, col, num):
     # Check if the number is already in the row
@@ -35,6 +36,8 @@ def is_valid(sudoku_grid, row, col, num):
 
     return True
 
+#FUNCTION TO SOLVE THE SUDOKU GRID USING BACKTRACKING
+
 def solve_sudoku(sudoku_grid):
     for row in range(9):
         for col in range(9):
@@ -55,6 +58,25 @@ def solve_sudoku(sudoku_grid):
                 return False  # No valid number found, trigger backtracking
 
     return True  # Solved successfully
+
+
+#FUNCTION TO STRIP THE NUMBERS FROM THE SUDOKU BASED ON DIFFICULTY LEVEL CHOICE
+
+def remove_numbers(sudoku_grid, target_level=30):
+    cells = [(r, c) for r in range(9) for c in range(9)]
+    random.shuffle(cells)  # Shuffle the list of cells
+
+    current_level = 81  # Start with all cells filled
+
+    for row, col in cells:
+        if current_level <= target_level:
+            break  # Stop if we have reached the target level
+        
+        #Store original number incase we need it later
+        temp = sudoku_grid[row][col]
+        sudoku_grid[row][col] = 0  # Remove the number
+        current_level -= 1  # Decrease the current level
+
 
 
 #GENERATING SUDOKU GRID W/ DIVIDERS
@@ -83,6 +105,8 @@ board = [[0] * 9 for _ in range(9)]
 board[0][0] = 5
 
 solve_sudoku(board)
+
+remove_numbers(board, target_level=30)  # Remove numbers to create a puzzle with 30 empty cells
 
 generate_sudoku(board)
 
