@@ -1,7 +1,7 @@
 import copy
 import random
 
-print("Welcome to the Sudoku Generator!")
+print("Welcome to the Sudoku Master!")
 
 #LIST OF EMPTY ROWS
 
@@ -84,7 +84,7 @@ def remove_numbers(sudoku_grid, target_level=30):
             break  # Stop if we have reached the target level
         
         #Store original number incase we need it later
-        temp = sudoku_grid[row][col]
+        #temp = sudoku_grid[row][col]
         sudoku_grid[row][col] = 0  # Remove the number
         current_level -= 1  # Decrease the current level
 
@@ -127,8 +127,8 @@ def generate_puzzle(difficulty="medium"):
         difficulty = "medium"
         target_given = random.randint(25, 30)
 
-    remove_numbers(board, target_level=target_given)
-    generate_sudoku(board)
+    remove_numbers(playable_board, target_level=target_given)
+    #generate_sudoku(board)
     return playable_board, board  # Return the generated puzzle for further use if needed
 
 
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     puzzle, solution = generate_puzzle(choice)
 
     #print("\nGenerated Sudoku Puzzle:")
-    #generate_sudoku(puzzle)
+    generate_sudoku(puzzle)
 
     #print("\nSudoku Solution:")
     #generate_sudoku(solution)
